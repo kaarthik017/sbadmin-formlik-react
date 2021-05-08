@@ -1,10 +1,18 @@
 import { Link } from "react-router-dom";
 import userContext from "./userContext";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function Users(){
     let tableData = useContext(userContext);
-    let value = 1;
+    
+    let [userList,setUserList] = useState([]);
+    useEffect(async ()=> {
+        let users = await fetch("https://606ff05f85c3f0001746f0d5.mockapi.io/users");
+        let userData = await users.json();
+        setUserList([...userData])
+      
+    },[])
+  
     return <>
     <div class="container-fluid">
 
@@ -20,6 +28,7 @@ export default function Users(){
     
     <div class="card-body">
         <div class="table-responsive">
+            { userList.length > 0 ? 
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
@@ -36,16 +45,16 @@ export default function Users(){
                 <tbody>
                     {
                     
-                    tableData.userData.map((obj)=>{
+                    userList.map((obj)=>{
                         return <tr>
-                        <td>{obj.firstName}</td>
-                        <td>{obj.position}</td>
+                        <td>{obj.Name}</td>
+                        <td>{obj.Position}</td>
                         <td>{obj.Office}</td>
                         <td>{obj.Age}</td>
-                        <td>{obj.Date}</td>
+                        <td>{(obj.StartDate).slice(0,10)}</td>
                         <td>${obj.Salary}</td>
                         <td>
-                            <Link to={`/usersedit/${value++}`}>Edit User</Link>
+                            <Link to={`/usersedit/${obj.id}`}>Edit User</Link>
                         </td>
                     </tr>
                         
@@ -53,6 +62,8 @@ export default function Users(){
                     }
                   </tbody>
             </table>
+            : <div><h1>Loading..!</h1></div>
+            }
         </div>
     </div>
 </div>

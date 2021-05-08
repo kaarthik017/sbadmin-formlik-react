@@ -1,32 +1,54 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import  userContext  from "./userContext";
 import { useContext } from "react";
+import { useHistory } from "react-router";
 
 export default function Userscreate(){
 
     let userInfo = useContext(userContext);
+    let history = useHistory();
 
-    let [firstName,setFirstname] = useState("");
-    let [position,setPosition] = useState("");
+    let [Name,setFirstname] = useState("");
+    let [Position,setPosition] = useState("");
     let [Office,setOffice] = useState("");
     let [Age,setAge] = useState("");
-    let [Date,setDate] = useState("");
+    let [StartDate,setDate] = useState("");
     let [Salary,setSalary] = useState("");
     
-    let userSubmit = (e) => {
+    let userSubmit = async (e) => {
         e.preventDefault();
         userInfo.setUserData([...userInfo.userData, {
-            firstName,
-            position,
+            Name,
+            Position,
             Office,
             Age,
-            Date,
+            StartDate,
             Salary
         }])
+
+      await fetch("https://606ff05f85c3f0001746f0d5.mockapi.io/users",{
+        method: "POST",
+        body: JSON.stringify({
+          Name,
+          Position,
+          Office,
+          Age,
+          StartDate,
+          Salary
+        }),
+        headers: {
+          "Content-type":"application/json"
+        }
+
+      })
+
+      history.push('/users');
     }
+
+
     return <>
     
-    <div className="container">
+    <div className="container"no>
         <div className="row">
             <div className="col-lg-12">
                 <h1>Create User Form</h1>
@@ -36,11 +58,11 @@ export default function Userscreate(){
     <div class="form-row">
     <div class="form-group col-md-6">
       <label for="inputEmail4">FirstName</label>
-      <input type="text" class="form-control" placeholder="Firstname" value={firstName} onChange={(e) => setFirstname(e.target.value)}/>
+      <input type="text" class="form-control" placeholder="Firstname" value={Name} onChange={(e) => setFirstname(e.target.value)}/>
     </div>
     <div class="form-group col-md-6">
       <label for="inputPassword4">Position</label>
-      <input type="text" class="form-control" placeholder="Position" value={position} onChange={(e)=>setPosition(e.target.value)}/>
+      <input type="text" class="form-control" placeholder="Position" value={Position} onChange={(e)=>setPosition(e.target.value)}/>
     </div>
     <div class="form-group col-md-6">
       <label for="inputEmail4">Office</label>
@@ -52,7 +74,7 @@ export default function Userscreate(){
     </div>
     <div class="form-group col-md-6">
     <label for="example-date-input" class="col-2 col-form-label">Date</label>
-    <input class="form-control" type="date" value="2011-08-19" value={Date} onChange={(e)=>setDate(e.target.value)}/>
+    <input class="form-control" type="date" value="2011-08-19" value={StartDate} onChange={(e)=>setDate(e.target.value)}/>
     </div>
     <div class="form-group col-md-6">
       <label for="inputPassword4">Salary</label>

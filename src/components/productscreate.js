@@ -1,22 +1,37 @@
 import { useState } from "react"
 import  userContext  from "./userContext";
 import { useContext } from "react";
+import { useHistory } from "react-router";
 
 export default function Productscreate(){
 
     let productInfo = useContext(userContext);
 
+    let history = useHistory();
+
     let [Name,setname] = useState("");
     let [Category,setCategory] = useState("");
     let [Price,setPrice] = useState("");
     
-    let productSubmit = (e) => {
+    let productSubmit = async (e) => {
         e.preventDefault();
         productInfo.setProductData([...productInfo.productData, {
             Name,
             Category,
             Price
         }])
+        await fetch("https://606ff05f85c3f0001746f0d5.mockapi.io/products",{
+        method: "POST",
+        body: JSON.stringify({
+          Name,
+          Category,
+          Price
+        }),
+        headers: {
+          "Content-type":"application/json"
+        }})
+
+        history.push('/products');
     }
     return <>
     

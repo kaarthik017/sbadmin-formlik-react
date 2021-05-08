@@ -1,10 +1,16 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import userContext from "./userContext";
 
 export default function Products(){
-    let productList = useContext(userContext);
-    let value = 1;
+    let productsList = useContext(userContext);
+    let [productList,setProductList] = useState([]);
+    useEffect(async ()=> {
+        let users = await fetch("https://606ff05f85c3f0001746f0d5.mockapi.io/products");
+        let userData = await users.json();
+        setProductList([...userData])
+      
+    },[])
     return <>
     <div class="container-fluid">
 
@@ -19,6 +25,8 @@ export default function Products(){
     
     <div class="card-body">
         <div class="table-responsive">
+            {
+                productList.length > 0 ?
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
@@ -31,19 +39,21 @@ export default function Products(){
                 
                 <tbody>
                     {
-                        productList.productData.map((obj)=>{
+                       productList.map((obj)=>{
                             return <tr>
                             <td>{obj.Name}</td>
                             <td>{obj.Category}</td>
                             <td>${obj.Price}</td>
                             <td>
-                                <Link to={`/productsedit/${value++}`}>Edit Product</Link>
+                                <Link to={`/productsedit/${obj.id}`}>Edit Product</Link>
                             </td>
                         </tr>
                         })
                     }
                   </tbody>
             </table>
+            : <div><h1>Loading..!</h1></div>
+                }
         </div>
     </div>
 </div>
