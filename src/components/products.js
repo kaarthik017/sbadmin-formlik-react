@@ -1,6 +1,10 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import userContext from "./userContext";
 
 export default function Products(){
+    let productList = useContext(userContext);
+    let value = 1;
     return <>
     <div class="container-fluid">
 
@@ -26,46 +30,18 @@ export default function Products(){
                 </thead>
                 
                 <tbody>
-                    <tr>
-                        <td>Desktop</td>
-                        <td>IT</td>
-                        <td>$3000</td>
-                        <td>
-                            <Link to="/productsedit/1">Edit Product</Link>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Laptop</td>
-                        <td>IT</td>
-                        <td>$3000</td>
-                        <td>
-                            <Link to="/productsedit/2">Edit Product</Link>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Router</td>
-                        <td>IT</td>
-                        <td>$300</td>
-                        <td>
-                            <Link to="/productsedit/3">Edit Product</Link>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Keyboard</td>
-                        <td>IT</td>
-                        <td>$30</td>
-                        <td>
-                            <Link to="/productsedit/4">Edit Product</Link>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>USB</td>
-                        <td>IT</td>
-                        <td>$10</td>
-                        <td>
-                            <Link to="/productsedit/5">Edit Product</Link>
-                        </td>
-                    </tr>
+                    {
+                        productList.productData.map((obj)=>{
+                            return <tr>
+                            <td>{obj.Name}</td>
+                            <td>{obj.Category}</td>
+                            <td>${obj.Price}</td>
+                            <td>
+                                <Link to={`/productsedit/${value++}`}>Edit Product</Link>
+                            </td>
+                        </tr>
+                        })
+                    }
                   </tbody>
             </table>
         </div>

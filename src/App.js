@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import Sidebar from './components/sidebar';
 import Navigation from './components/navbar';
@@ -14,16 +13,19 @@ import Usersedit from './components/usersedit';
 import Products from './components/products';
 import Productscreate from './components/productscreate';
 import Productsedit from './components/productsedit';
+import { UserProvider } from './components/userContext';
+
 
 function App() {
  return <>
- <Router> <div id="wrapper">
+ <Router> 
+   <div id="wrapper">
    <Sidebar></Sidebar>
-
    <div id="content-wrapper" class="d-flex flex-column">
    <div id="content">
         <Navigation></Navigation>
-       <Switch>
+        <UserProvider>
+        <Switch>
          <Route path="/dashboard" component={Dashboard} exact={true}></Route>
          <Route path="/products" component={Products} exact={true}></Route>
          <Route path="/users" component={Users} exact={true}></Route>
@@ -33,7 +35,7 @@ function App() {
          <Route path="/productsedit/:id" component={Productsedit} exact={true}></Route>
          <Route path="/usersedit/:id" component={Usersedit} exact={true}></Route>
        </Switch>
-     
+       </UserProvider>
    </div>
    </div>
  </div>

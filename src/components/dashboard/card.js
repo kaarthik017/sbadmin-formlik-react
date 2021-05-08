@@ -1,6 +1,9 @@
+import {useContext} from 'react';
+import userContext from '../userContext'
 import Progressbar from "./progressbar";
 export default function Card(props){
-    
+            let data = useContext(userContext);
+            console.log(data);
             return <>
                      <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-primary shadow h-100 py-2">

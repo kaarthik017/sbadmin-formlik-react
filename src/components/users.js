@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
+import userContext from "./userContext";
+import { useContext } from "react";
 
 export default function Users(){
+    let tableData = useContext(userContext);
+    let value = 1;
     return <>
     <div class="container-fluid">
 
@@ -30,61 +34,23 @@ export default function Users(){
                 </thead>
                 
                 <tbody>
-                    <tr>
-                        <td>Tiger Nixon</td>
-                        <td>System Architect</td>
-                        <td>Edinburgh</td>
-                        <td>61</td>
-                        <td>2011/04/25</td>
-                        <td>$320,800</td>
+                    {
+                    
+                    tableData.userData.map((obj)=>{
+                        return <tr>
+                        <td>{obj.firstName}</td>
+                        <td>{obj.position}</td>
+                        <td>{obj.Office}</td>
+                        <td>{obj.Age}</td>
+                        <td>{obj.Date}</td>
+                        <td>${obj.Salary}</td>
                         <td>
-                            <Link to="/usersedit/1">Edit User</Link>
+                            <Link to={`/usersedit/${value++}`}>Edit User</Link>
                         </td>
                     </tr>
-                    <tr>
-                        <td>Tiger Nixon</td>
-                        <td>System Architect</td>
-                        <td>Edinburgh</td>
-                        <td>61</td>
-                        <td>2011/04/25</td>
-                        <td>$320,800</td>
-                        <td>
-                            <Link to="/usersedit/2">Edit User</Link>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Tiger Nixon</td>
-                        <td>System Architect</td>
-                        <td>Edinburgh</td>
-                        <td>61</td>
-                        <td>2011/04/25</td>
-                        <td>$320,800</td>
-                        <td>
-                            <Link to="/usersedit/3">Edit User</Link>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Tiger Nixon</td>
-                        <td>System Architect</td>
-                        <td>Edinburgh</td>
-                        <td>61</td>
-                        <td>2011/04/25</td>
-                        <td>$320,800</td>
-                        <td>
-                            <Link to="/usersedit/4">Edit User</Link>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Tiger Nixon</td>
-                        <td>System Architect</td>
-                        <td>Edinburgh</td>
-                        <td>61</td>
-                        <td>2011/04/25</td>
-                        <td>$320,800</td>
-                        <td>
-                            <Link to="/usersedit/5">Edit User</Link>
-                        </td>
-                    </tr>
+                        
+                    })
+                    }
                   </tbody>
             </table>
         </div>
