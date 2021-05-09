@@ -24,7 +24,7 @@ export default function Users(){
             }
           })
           toast('Record Deleted'); 
-          window.setTimeout(function(){window.location.reload()},5000)
+          window.setTimeout(function(){window.location.href = window.location.href},5000)
     }
   
     return <>
