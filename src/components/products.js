@@ -1,9 +1,12 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import userContext from "./userContext";
+import {toast} from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
+
+toast.configure();
 
 export default function Products(){
-    let productsList = useContext(userContext);
+  
     let [productList,setProductList] = useState([]);
     useEffect(async ()=> {
         let users = await fetch("https://606ff05f85c3f0001746f0d5.mockapi.io/products");
@@ -11,6 +14,18 @@ export default function Products(){
         setProductList([...userData])
       
     },[])
+
+    async function deleteData(id){
+        await fetch(`https://606ff05f85c3f0001746f0d5.mockapi.io/products/${id}`,{
+            method: "DELETE",
+            body: null,
+            headers: {
+              "Content-type":"application/json"
+            }
+          })
+          toast('Record Deleted'); 
+          window.setTimeout(function(){window.location.reload()},5000)
+    }
     return <>
     <div class="container-fluid">
 
@@ -34,6 +49,7 @@ export default function Products(){
                         <th>Category</th>
                         <th>Price</th>
                         <th>Edit</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 
@@ -46,6 +62,11 @@ export default function Products(){
                             <td>${obj.Price}</td>
                             <td>
                                 <Link to={`/productsedit/${obj.id}`}>Edit Product</Link>
+                            </td>
+                            <td>
+                                <button type="button" className="btn btn-danger" onClick={()=>{
+                                    deleteData(obj.id)
+                                }}>Delete</button>
                             </td>
                         </tr>
                         })

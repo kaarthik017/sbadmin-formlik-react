@@ -1,25 +1,38 @@
-import { useState } from "react"
-import  userContext  from "./userContext";
-import { useContext } from "react";
+
 import { useHistory } from "react-router";
+import { useFormik } from "formik";
 
 export default function Productscreate(){
 
-    let productInfo = useContext(userContext);
 
     let history = useHistory();
-
-    let [Name,setname] = useState("");
-    let [Category,setCategory] = useState("");
-    let [Price,setPrice] = useState("");
     
-    let productSubmit = async (e) => {
-        e.preventDefault();
-        productInfo.setProductData([...productInfo.productData, {
-            Name,
-            Category,
-            Price
-        }])
+    let validate = (values) =>{
+      const errors = {}
+      if(!values.Name){
+        errors.Name = 'Required';
+      }
+      if(!values.Category){
+        errors.Category = 'Required';
+      }
+      if(!values.Price){
+        errors.Price = 'Required';
+      }
+     return errors
+    }
+
+    const formik = useFormik({
+      initialValues: {
+          Name: '',
+          Category:'',
+          Price:'',
+        },
+      validate,
+      onSubmit: async (values) => {
+        
+        let Name = values.Name;
+        let Category = values.Category;
+        let Price = values.Price;
         await fetch("https://606ff05f85c3f0001746f0d5.mockapi.io/products",{
         method: "POST",
         body: JSON.stringify({
@@ -29,10 +42,15 @@ export default function Productscreate(){
         }),
         headers: {
           "Content-type":"application/json"
-        }})
+        }
 
-        history.push('/products');
-    }
+      })
+
+      history.push('/products');
+        
+      }
+    })
+
     return <>
     
     <div className="container">
@@ -41,19 +59,22 @@ export default function Productscreate(){
                 <h1>Create Product Form</h1>
             </div>
         </div>
-    <form onSubmit={productSubmit}>
+    <form onSubmit={formik.handleSubmit}>
     <div class="form-row">
     <div class="form-group col-md-6">
       <label for="inputEmail4">Name</label>
-      <input type="text" class="form-control" placeholder="Name" value={Name} onChange={(e)=>setname(e.target.value)}/>
+      <input type="text" class="form-control" placeholder="Name" name="Name" value={formik.values.Name} onChange={formik.handleChange}/>
+      {formik.touched.Name && formik.errors.Name ? (<div style={{color:'red'}}>{formik.errors.Name}</div> ) : null}
     </div>
     <div class="form-group col-md-6">
       <label for="inputPassword4">Category</label>
-      <input type="text" class="form-control" placeholder="Category" value={Category} onChange={(e)=>setCategory(e.target.value)} />
+      <input type="text" class="form-control" placeholder="Category" name="Category" value={formik.values.Category} onChange={formik.handleChange} />
+      {formik.touched.Category && formik.errors.Category ? (<div style={{color:'red'}}>{formik.errors.Category}</div> ) : null}
     </div>
     <div class="form-group col-md-6">
       <label for="inputEmail4">Price</label>
-      <input type="number" class="form-control" placeholder="Price" value={Price} onChange={(e)=>setPrice(e.target.value)} />
+      <input type="number" class="form-control" placeholder="Price" name="Price" value={formik.values.Price} onChange={formik.handleChange} />
+      {formik.touched.Price && formik.errors.Price ? (<div style={{color:'red'}}>{formik.errors.Price}</div> ) : null}
     </div>
     <div className="col-md-12">
         

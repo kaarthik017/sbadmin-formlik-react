@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
-import userContext from "./userContext";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import {toast} from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
+
+toast.configure();
 
 export default function Users(){
-    let tableData = useContext(userContext);
     
     let [userList,setUserList] = useState([]);
     useEffect(async ()=> {
@@ -12,6 +14,18 @@ export default function Users(){
         setUserList([...userData])
       
     },[])
+
+    async function deleteData(id){
+        await fetch(`https://606ff05f85c3f0001746f0d5.mockapi.io/users/${id}`,{
+            method: "DELETE",
+            body: null,
+            headers: {
+              "Content-type":"application/json"
+            }
+          })
+          toast('Record Deleted'); 
+          window.setTimeout(function(){window.location.reload()},5000)
+    }
   
     return <>
     <div class="container-fluid">
@@ -39,6 +53,7 @@ export default function Users(){
                         <th>Start date</th>
                         <th>Salary</th>
                         <th>Edit</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 
@@ -55,6 +70,11 @@ export default function Users(){
                         <td>${obj.Salary}</td>
                         <td>
                             <Link to={`/usersedit/${obj.id}`}>Edit User</Link>
+                        </td>
+                        <td>
+                            <button type="button" value="Delete" className="btn btn-danger" onClick={ ()=>{
+                                deleteData(obj.id)
+                            }}>Delete</button>
                         </td>
                     </tr>
                         
